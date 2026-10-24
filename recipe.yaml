@@ -1,0 +1,71 @@
+context:
+  version: "2026.3.post100"
+
+package:
+  name: goose
+  version: ${{ version }}
+
+# Built from this fork's own tree, which tracks upstream master
+# (100 commits past tag v2026.3 when this version was set).
+source:
+  path: .
+
+build:
+  number: 0
+  skip:
+    - not linux
+  script:
+    # No blessed packages compiled in (GOOSE_BUILTIN_LIBS empty): a program
+    # importing gfx, audio, ui or physics has it fetched and built into
+    # ~/.goose on first use, as with a source build of the compiler.
+    - cmake -S . -B build -G Ninja $CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DGOOSE_BUILTIN_LIBS=
+    - cmake --build build --target goose
+    # The release layout (scripts/package_release.py): the compiler finds
+    # stdlib/ and tcclib/ beside its own binary, with links resolved.
+    - mkdir -p "$PREFIX/lib/goose" "$PREFIX/bin"
+    - cp build/goose "$PREFIX/lib/goose/goose"
+    - cp -r stdlib "$PREFIX/lib/goose/stdlib"
+    - cp -r build/tcclib "$PREFIX/lib/goose/tcclib"
+    - ln -s ../lib/goose/goose "$PREFIX/bin/goose"
+
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - ${{ compiler('cxx') }}
+    - cmake >=3.27
+    - ninja
+
+tests:
+  - files:
+      source:
+        - samples/01_tour.goose
+        - samples/07_sieve.goose
+    script:
+      - goose version
+      - goose check samples/01_tour.goose
+      - goose -o sieve.c samples/07_sieve.goose
+      - test -s sieve.c
+      # In-process run through TinyCC, against the system's libc headers.
+      - goose samples/07_sieve.goose
+  - package_contents:
+      bin:
+        - goose
+      files:
+        - lib/goose/stdlib/**
+        - lib/goose/tcclib/include/stddef.h
+
+about:
+  homepage: https://aardappel.github.io/goose/
+  repository: https://github.com/aardappel/goose
+  documentation: https://github.com/aardappel/goose/blob/master/docs/tutorial.md
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: A memory-safe systems language with no heap allocator, garbage collector, or lifetime annotations
+  description: |
+    Goose compiles to C, and runs programs in-process through a built-in
+    TinyCC backend. In-process runs need the system C library headers
+    (libc6-dev or glibc-devel); `goose build` also needs a C compiler.
+
+extra:
+  recipe-maintainers:
+    - nandi-conda
