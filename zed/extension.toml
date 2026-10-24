@@ -10,7 +10,7 @@ repository = "https://github.com/nandi-conda/goose"
 # that last changed it.
 [grammars.goose]
 repository = "https://github.com/nandi-conda/goose"
-rev = "GRAMMAR_REV"
+rev = "ab4797b077178c9d35ed7a2c55f0a6dd5b03ad6c"
 path = "tree-sitter"
 
 [language_servers.goose]
