@@ -21,8 +21,9 @@ order, for example), but it should never reject a program the compiler accepts.
 | `build.py` | Generates the parser, and checks it. |
 
 The parser itself (`src/parser.c`, `src/grammar.json`, `src/node-types.json`,
-`src/tree_sitter/`) is generated from `grammar.js` and not checked in. Run
-`build.py` before pointing an editor at this directory.
+`src/tree_sitter/`) is generated from `grammar.js` by `build.py`. It is checked
+in, because Zed builds grammars from a git commit (see [`../zed`](../zed/README.md));
+regenerate and commit it with every change to `grammar.js`.
 
 ## Development
 
@@ -44,9 +45,11 @@ the corpus's expected trees after a grammar change, run
 
 ## Editor setup
 
-Each editor builds the grammar from this directory, once `build.py` has
-generated the parser, and copies `queries/highlights.scm` into its own query
-path.
+**Zed** has an extension in [`../zed`](../zed/README.md), which uses this
+grammar and starts the language server.
+
+The others build the grammar from this directory and copy
+`queries/highlights.scm` into their own query path.
 
 **Neovim** (nvim-treesitter):
 

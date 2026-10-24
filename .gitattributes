@@ -7,3 +7,9 @@
 
 # Checks that a """ string's line breaks come out as \n from a CRLF file.
 test/syntax/raw_strings_crlf.goose -text
+
+# The tree-sitter parser build.py generates, checked in for Zed.
+tree-sitter/src/parser.c linguist-generated
+tree-sitter/src/grammar.json linguist-generated
+tree-sitter/src/node-types.json linguist-generated
+tree-sitter/src/tree_sitter/** linguist-generated

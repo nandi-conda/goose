@@ -1,0 +1,18 @@
+id = "goose"
+name = "Goose"
+version = "0.1.0"
+schema_version = 1
+authors = ["nandi-conda"]
+description = "Goose language support: tree-sitter highlighting and the goose language server"
+repository = "https://github.com/nandi-conda/goose"
+
+# The grammar in this repository's tree-sitter/ directory, at the commit
+# that last changed it.
+[grammars.goose]
+repository = "https://github.com/nandi-conda/goose"
+rev = "GRAMMAR_REV"
+path = "tree-sitter"
+
+[language_servers.goose]
+name = "Goose Language Server"
+languages = ["Goose"]

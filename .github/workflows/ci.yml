@@ -82,6 +82,41 @@ jobs:
           npm ci --no-audit --no-fund
           npm test
 
+  # The tree-sitter grammar and the Zed extension, which Zed builds from the
+  # grammar's checked-in parser: the parser must be what grammar.js
+  # generates, every query must compile against it, and the extension must
+  # build for the WebAssembly target Zed loads.
+  zed:
+    name: tree-sitter / zed
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Generate and check the grammar
+        run: python3 tree-sitter/build.py --check
+
+      - name: The checked-in parser is up to date
+        run: git diff --exit-code -- tree-sitter/src
+
+      - name: Compile the Zed queries
+        working-directory: tree-sitter
+        run: |
+          for q in ../zed/languages/goose/*.scm; do
+            echo "$q"
+            node_modules/.bin/tree-sitter query "$q" ../samples/01_tour.goose > /dev/null
+          done
+
+      - name: Build the Zed extension
+        working-directory: zed
+        run: |
+          rustup target add wasm32-wasip2
+          cargo build --release --target wasm32-wasip2
+
   sanitize:
     name: Linux / ASan + UBSan
     runs-on: ubuntu-latest

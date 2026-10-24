@@ -2,8 +2,8 @@
 
 The compiler is its own language server: `goose lsp` speaks the Language
 Server Protocol on stdin and stdout, so any editor with an LSP client can
-use it. VS Code has an [extension](../vscode/README.md) that starts it for
-you. For Neovim, Helix and Emacs, the configuration below is all it takes.
+use it. VS Code and Zed have extensions ([VS Code](../vscode/README.md),
+[Zed](../zed/README.md)) that start it for you. For Neovim, Helix and Emacs, the configuration below is all it takes.
 
 Every snippet starts `goose lsp` with the compiler on PATH; where it is
 not, put the executable's full path in place of `goose`. The server finds
@@ -21,7 +21,9 @@ where these options go.
 
 The server's semantic tokens color names by what they resolve to
 (functions, types, fields, variants, parameters, variables), not keywords,
-strings or comments; the TextMate grammar is VS Code's alone.
+strings or comments; the TextMate grammar is VS Code's alone, and editors that highlight
+with tree-sitter (Zed, Neovim, Helix) can use the grammar in
+[`tree-sitter/`](../tree-sitter/README.md).
 
 ## Neovim
 
@@ -96,9 +98,9 @@ What it shows: diagnostics, hover (`space k`), go to definition (`gd`),
 references (`gr`), rename (`space r`), document and workspace symbols
 (`space s`, `space S`), signature help and completion as you type, and
 inlay hints with `display-inlay-hints = true` under `[editor.lsp]` in
-`config.toml`. Helix highlights with tree-sitter grammars, of which Goose
-has none, and has no semantic tokens, folding or code lenses, so files
-show uncolored.
+`config.toml`. Helix highlights with tree-sitter grammars: for colors, add
+the one in [`tree-sitter/`](../tree-sitter/README.md) as its README shows.
+It has no semantic tokens, folding or code lenses.
 
 ## Emacs
 
