@@ -12,7 +12,10 @@ A [Zed](https://zed.dev) extension for Goose:
 
 Until it is in Zed's extension registry, install it as a dev extension: in
 Zed, run **zed: install dev extension** and pick this `zed/` directory. Zed
-builds it with Rust, so Rust must be installed through rustup.
+builds it with Rust, so Rust must be installed through rustup;
+`rust-toolchain.toml` has rustup use its stable toolchain with the
+`wasm32-wasip2` target here, which rustup installs on first use, even where
+the default toolchain is a distro's Rust.
 
 The language server is the compiler, so `goose` must be on `PATH`. Where it
 is not, or to pass the server options, use Zed's `settings.json`:

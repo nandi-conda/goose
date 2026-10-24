@@ -1,0 +1,6 @@
+# Zed builds the extension with whatever toolchain rustup picks here and adds
+# wasm32-wasip2 to it, which fails on a linked toolchain (a distro's Rust as
+# rustup's `system`). Naming rustup's stable, with the target, works anywhere.
+[toolchain]
+channel = "stable"
+targets = ["wasm32-wasip2"]
